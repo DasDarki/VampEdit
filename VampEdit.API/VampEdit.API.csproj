@@ -63,6 +63,8 @@
     <Compile Include="UI\Layout\IParent.cs" />
     <Compile Include="UI\Layout\IRow.cs" />
     <Compile Include="UI\SetupSettings.cs" />
+    <Compile Include="UI\Sidebar\ISidebarGroup.cs" />
+    <Compile Include="UI\Sidebar\ISidebarItem.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

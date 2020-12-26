@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using VampEdit.API.UI;
 using VampEdit.API.UI.Controls;
 using VampEdit.API.UI.Layout;
+using VampEdit.API.UI.Sidebar;
 using VampEdit.UI.Controls;
 using VampEdit.UI.Layout;
+using VampEdit.UI.Sidebar;
 
 namespace VampEdit.UI
 {
@@ -13,21 +15,72 @@ namespace VampEdit.UI
         internal static Element CreateElement<T>(IParent parent, string id, SetupSettings settings) where T : IElement
         {
             Type type = typeof(T);
-            if (ElementTypes.ContainsKey(type))
+            if (type == typeof(IParent))
             {
-                return (Element) Activator.CreateInstance(ElementTypes[type], parent, id, settings);
+                return new Parent(parent, id, settings);
+            }
+
+            if (type == typeof(IColumn))
+            {
+                return new Column(parent, id, settings);
+            }
+
+            if (type == typeof(IRow))
+            {
+                return new Row(parent, id, settings);
+            }
+
+            if (type == typeof(IField))
+            {
+                return new Field(parent, id, settings);
+            }
+
+            if (type == typeof(IFieldBody))
+            {
+                return new FieldBody(parent, id, settings);
+            }
+
+            if (type == typeof(IButton))
+            {
+                return new Button(parent, id, settings);
+            }
+
+            if (type == typeof(ICard))
+            {
+                return new Card(parent, id, settings);
+            }
+
+            if (type == typeof(ITextInput))
+            {
+                return new TextInput(parent, id, settings);
+            }
+
+            if (type == typeof(INumberInput))
+            {
+                return new NumberInput(parent, id, settings);
+            }
+
+            if (type == typeof(ICheckbox))
+            {
+                return new Checkbox(parent, id, settings);
+            }
+
+            if (type == typeof(ISelect))
+            {
+                return new Select(parent, id, settings);
+            }
+
+            if (type == typeof(ISidebarGroup))
+            {
+                return new SidebarGroup(parent, id, settings);
+            }
+
+            if (type == typeof(ISidebarItem))
+            {
+                return new SidebarItem(parent, id, settings);
             }
 
             return default;
         }
-
-        private static readonly Dictionary<Type, Type> ElementTypes = new Dictionary<Type, Type>
-        {
-            {typeof(IRow), typeof(Row)}, {typeof(IColumn), typeof(Column)}, {typeof(IField), typeof(Field)},
-            {typeof(IFieldBody), typeof(FieldBody)}, {typeof(IButton), typeof(Button)}, {typeof(ICard), typeof(Card)},
-            {typeof(ITextInput), typeof(TextInput)}, {typeof(INumberInput), typeof(NumberInput)},
-            {typeof(ICheckbox), typeof(Checkbox)}, {typeof(ISelect), typeof(Select)}
-        };
-
     }
 }

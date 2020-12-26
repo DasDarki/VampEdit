@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
 using VampEdit.API.UI;
+using VampEdit.API.UI.Layout;
 using VampEdit.UI;
 
 namespace VampEdit
@@ -17,9 +18,12 @@ namespace VampEdit
 
         internal FrontendBridge Bridge { get; }
 
+        internal Window Window { get; }
+
         public MainForm()
         {
             Instance = this;
+            Window = new Window();
             InitializeComponent();
             CefSettings settings = new CefSettings();
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
@@ -43,14 +47,9 @@ namespace VampEdit
             {
                 if (args.Frame.IsMain)
                 {
-                    CefUI.UI.ContainerLoad += (type, parent) =>
-                    {
-                        if (type == ContainerType.MainWindow)
-                        {
-                            OnMainWindowInit();
-                        }
-                    };
-                    CefUI.UI.TriggerContainerLoad("wrapper", ContainerType.MainWindow);
+                    CefUI.UI.TriggerContainerLoad(Window.Sidebar, ContainerType.Sidebar);
+                    CefUI.UI.TriggerContainerLoad(Window.Pages, ContainerType.Pages);
+                    Window.Initialize();
                     Browser.ShowDevTools();
                     SafeInvoke(() =>
                     {
@@ -58,11 +57,6 @@ namespace VampEdit
                     });
                 }
             };
-        }
-
-        private void OnMainWindowInit()
-        {
-
         }
 
         internal void Run(Action callback)

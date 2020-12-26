@@ -30,7 +30,7 @@ namespace VampEdit.UI
         {
             string state = isDanger ? "true" : "false";
             MainForm.Instance.Browser.ExecuteScriptAsyncWhenPageLoaded(
-                $"ui_AddCardFooterButton('{id}', '{clickId}', '{text}', {state})");
+                $"ui_AddCardFooterButton('{id}_card_footer', '{clickId}', '{text}', {state})");
         }
 
         internal static void SetElementDisplay(string id, bool visible)
@@ -63,6 +63,12 @@ namespace VampEdit.UI
             MainForm.Instance.Browser.ExecuteScriptAsyncWhenPageLoaded($"ui_DestroyElement('{id}')");
         }
 
+        internal static void AddElementToParent(string parentId, string html)
+        {
+            MainForm.Instance.Browser.ExecuteScriptAsyncWhenPageLoaded(
+                $"ui_CreateElement('{parentId}', `{html}`)");
+        }
+
         internal static IElement CreateElement<T>(IParent parent, string id, SetupSettings settings) where T : IElement
         {
             Element element = ElementRegistry.CreateElement<T>(parent, id, settings);
@@ -72,9 +78,8 @@ namespace VampEdit.UI
             }
 
             CreatedElements.Add(element);
+            AddElementToParent(parent.ID, element.GetHTML(string.Join(" ", element.Classes)));
             ((Parent) parent).InternalChildren.Add(element);
-            MainForm.Instance.Browser.ExecuteScriptAsyncWhenPageLoaded(
-                $"ui_CreateElement('{parent.ID}', `{element.GetHTML(string.Join(" ", element.Classes))}`)");
             return element;
         }
 

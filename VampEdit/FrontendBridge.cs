@@ -2,8 +2,10 @@
 using VampEdit.API;
 using VampEdit.API.UI;
 using VampEdit.API.UI.Controls;
+using VampEdit.API.UI.Sidebar;
 using VampEdit.UI;
 using VampEdit.UI.Controls;
+using VampEdit.UI.Sidebar;
 using Button = VampEdit.UI.Controls.Button;
 
 // ReSharper disable InconsistentNaming
@@ -16,6 +18,24 @@ namespace VampEdit
         internal FrontendBridge(MainForm form)
         {
             _browser = form.Browser;
+        }
+
+        public void ui_TriggerSidebarSelect(string id)
+        {
+            IElement element = CefUI.CreatedElements.SelectFirst(o => o.ID == id);
+            if (element != null && element is ISidebarItem item)
+            {
+                ((SidebarItem) item).Select();
+            }
+        }
+
+        public void ui_TriggerLabelCallback(string id, string labelId)
+        {
+            IElement element = CefUI.CreatedElements.SelectFirst(o => o.ID == id);
+            if (element != null && element is ISidebarGroup group)
+            {
+                ((SidebarGroup) group).TriggerLabelCallback(labelId);
+            }
         }
 
         public void ui_OnCheckboxChange(string id, bool val)

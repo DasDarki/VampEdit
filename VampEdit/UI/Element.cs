@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CefSharp;
 using VampEdit.API.UI;
 
 namespace VampEdit.UI
@@ -18,6 +19,18 @@ namespace VampEdit.UI
             {
                 _visible = value;
                 CefUI.SetElementDisplay(ID, _visible);
+            }
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                JavascriptResponse response = MainForm.Instance.Browser.EvaluateScriptAsync($"!!document.getElementById(`{ID}`);")
+                    .GetAwaiter().GetResult();
+                bool b = response.Result as bool? ?? false;
+                if (!b) CefUI.CreatedElements.Remove(this);
+                return b;
             }
         }
 

@@ -11,17 +11,17 @@
     <script src="jquery.js"></script>
     <style>
         html, body {
-            margin: 0;
+            height: 100vh;
             padding: 0;
+            margin: 0;
         }
 
-        #holder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100%;
+        #background {
             background: #ECF0F3;
+            position: fixed;
+            z-index: -1000;
+            width: 100%;
+            height: 100vh;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -41,8 +41,9 @@
         }
 
         #wrapper {
-            margin: 10px;
-            height: calc(100vh - 20px);
+            margin: 10px 10px 0;
+            height: 100%;
+            max-width: calc(100% - 20px);
             width: calc(100% - 20px);
         }
 
@@ -134,100 +135,108 @@
     </style>
 </head>
 <body>
-    <div id="holder" class="force-dark">
-        <div class="container" id="wrapper">
+<div id="background" class="force-dark"></div>
+<div class="container" id="wrapper">
+    <div class="columns" style="margin-left: 10px">
+        <div class="column is-3">
+            <aside class="menu is-hidden-mobile" id="sidebar">
 
+            </aside>
+        </div>
+        <div class="column is-9" style="padding-top: 25px">
+            <div id="pages"></div>
         </div>
     </div>
     <div id="modal-plugins"></div>
-    <div id="loader" style="display: none">
-        <div id="ld-holder">
-            <div class="lds-ellipsis">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+</div>
+<div id="loader" style="display: none">
+    <div id="ld-holder">
+        <div class="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script>
-        function ui_OnChange(id) {
-            bridge.ui_OnChange(id, $('#' + id).val());
-        }
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    function ui_OnChange(id) {
+        bridge.ui_OnChange(id, $('#' + id).val());
+    }
 
-        function ui_SetSelectValue(id, value) {
-            $('#' + id).val(value);
-        }
+    function ui_SetSelectValue(id, value) {
+        $('#' + id).val(value);
+    }
 
-        function ui_OnFocusOut(id) {
-            bridge.ui_OnFocusOut(id);
-        }
+    function ui_OnFocusOut(id) {
+        bridge.ui_OnFocusOut(id);
+    }
 
-        function ui_OnCheckboxChange(id) {
-            bridge.ui_OnCheckboxChange(id, document.getElementById(id + '_val').checked);
-        }
+    function ui_OnCheckboxChange(id) {
+        bridge.ui_OnCheckboxChange(id, document.getElementById(id + '_val').checked);
+    }
 
-        function ui_AddCardFooterButton(id, callbackId, text, danger) {
-            $('#' + id).append(`<a href="#" class="card-footer-item" onclick="bridge.ui_FooterClick('${id}', '${callbackId}')"
+    function ui_AddCardFooterButton(id, callbackId, text, danger) {
+        $('#' + id).append(`<a href="#" class="card-footer-item" onclick="bridge.ui_FooterClick('${id}', '${callbackId}')"
                                            style="${danger ? "" : "color: red"}">${text}</a>`);
-        }
+    }
 
-        function ui_SetElementStyle(id, key, val) {
-            $('#' + id).css(key, JSON.parse(val));
-        }
+    function ui_SetElementStyle(id, key, val) {
+        $('#' + id).css(key, JSON.parse(val));
+    }
 
-        function ui_SetElementAttribute(id, key, val) {
-            $('#' + id).attr(key, val);
-        }
+    function ui_SetElementAttribute(id, key, val) {
+        $('#' + id).attr(key, val);
+    }
 
-        function ui_SetElementDisplay(id, visible) {
-            if (visible) {
-                $('#' + id).show();
-            } else {
-                $('#' + id).hide();
-            }
+    function ui_SetElementDisplay(id, visible) {
+        if (visible) {
+            $('#' + id).show();
+        } else {
+            $('#' + id).hide();
         }
+    }
 
-        function ui_CreatePluginPage(id) {
-            //$('#plugin-pages').append(`<div id="${id}" style="display: none"></div>`);
-        }
+    function ui_CreatePluginPage(id) {
+        //$('#plugin-pages').append(`<div id="${id}" style="display: none"></div>`);
+    }
 
-        function ui_CreateElement(parentId, html) {
-            $('#' + parentId).append(html);
-        }
+    function ui_CreateElement(parentId, html) {
+        $('#' + parentId).append(html);
+    }
 
-        function ui_SetInnerHTML(id, html) {
-            $('#' + id).html(html);
-        }
+    function ui_SetInnerHTML(id, html) {
+        $('#' + id).html(html);
+    }
 
-        function ui_DestroyElement(id) {
-            $('#' + id).remove();
-        }
+    function ui_DestroyElement(id) {
+        $('#' + id).remove();
+    }
 
-        function ui_AddClass(id, clazz) {
-            $('#' + id).addClass(clazz);
-        }
+    function ui_AddClass(id, clazz) {
+        $('#' + id).addClass(clazz);
+    }
 
-        function ui_RemoveClass(id, clazz) {
-            $('#' + id).removeClass(clazz);
-        }
+    function ui_RemoveClass(id, clazz) {
+        $('#' + id).removeClass(clazz);
+    }
 
-        function alertConfirm(id, text, title, yes, no) {
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#62d630',
-                cancelButtonText: no,
-                confirmButtonText: yes
-            }).then(result => {
-                bridge.ui_TriggerConfirm(id, !!result.isConfirmed);
-            });
-        }
-    </script>
+    function alertConfirm(id, text, title, yes, no) {
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#62d630',
+            cancelButtonText: no,
+            confirmButtonText: yes
+        }).then(result => {
+            bridge.ui_TriggerConfirm(id, !!result.isConfirmed);
+        });
+    }
+</script>
 </body>
 </html>

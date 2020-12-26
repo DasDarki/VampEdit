@@ -89,9 +89,9 @@ namespace VampEdit.UI
             _confirmCallbacks.Remove(id);
         }
 
-        internal void TriggerContainerLoad(string id, ContainerType type)
+        internal void TriggerContainerLoad(Parent parent, ContainerType type)
         {
-            ContainerLoad?.Invoke(type, new Parent(null, id, SetupSettings.Default()));
+            ContainerLoad?.Invoke(type, parent);
         }
 
         public event Action<ContainerType, IParent> ContainerLoad;

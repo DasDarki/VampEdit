@@ -35,7 +35,7 @@ namespace VampEdit.UI
             }
 
             _footerCallbacks.Add(clickId, click);
-            CefUI.AddCardFooterButton(ID, clickId, text, false);
+            CefUI.AddCardFooterButton(ID, clickId, text, true);
             return this;
         }
 
@@ -48,7 +48,7 @@ namespace VampEdit.UI
             }
 
             _footerCallbacks.Add(clickId, click);
-            CefUI.AddCardFooterButton(ID, clickId, text, true);
+            CefUI.AddCardFooterButton(ID, clickId, text, false);
             return this;
         }
 
@@ -56,7 +56,7 @@ namespace VampEdit.UI
         {
             return $"<div id=\"{ID}_card\" class=\"card events-card\">" +
                    $"<header id=\"{ID}_card_header\" class=\"card-header\">" +
-                   $"<p id=\"{ID}_card_header_text\">{Header}</p>" +
+                   $"<p id=\"{ID}_card_header_text\" class=\"card-header-title\">{Header}</p>" +
                    $"</header>" +
                    $"<div class=\"card-table\"><div id=\"{ID}\" class=\"card-content\"></div></div>" +
                    $"<footer id=\"{ID}_card_footer\"></footer></div>";

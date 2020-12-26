@@ -6,8 +6,12 @@
     public enum ContainerType
     {
         /// <summary>
-        /// The main window container.
+        /// The sidebar of the main window.
         /// </summary>
-        MainWindow
+        Sidebar,
+        /// <summary>
+        /// A container which holds the pages which should be toggled by the sidebar.
+        /// </summary>
+        Pages
     }
 }

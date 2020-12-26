@@ -21,6 +21,11 @@
         bool Visible { get; set; }
 
         /// <summary>
+        /// Whether the element is valid or not.
+        /// </summary>
+        bool IsValid { get; }
+
+        /// <summary>
         /// Destroys the element and removes it from the UI.
         /// </summary>
         void Destroy();
